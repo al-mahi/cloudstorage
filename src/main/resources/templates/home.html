@@ -57,7 +57,7 @@
                             <td>
                                 <a class="btn btn-success" th:download="${file.name}"
                                    th:href="${file.dataURL}">Download</a>
-                                <a class="btn btn-danger" th:href="@{/files/delete(id=${file.id})}">Delete</a>
+                                <a class="btn btn-danger" th:href="@{/files/delete(id=${file.id})}" th:method="delete">Delete</a>
                             </td>
                             <th scope="row" th:text="${file.name}"></th>
                         </tr>
@@ -163,12 +163,12 @@
                         </tbody>
                     </table>
 
-                    <div class="alert alert-dark" th:if="${param.success}">
-                        You successfully updated credentials.
-                    </div>
-                    <div class="alert alert-danger" th:if="${param.error}">
-                        <span>Credentials Error Message</span>
-                    </div>
+<!--                    <div class="alert alert-dark" th:if="${param.success}">-->
+<!--                        You successfully updated credentials.-->
+<!--                    </div>-->
+<!--                    <div class="alert alert-danger" th:if="${param.error}">-->
+<!--                        <span>Credentials Error Message</span>-->
+<!--                    </div>-->
                 </div>
 
 
@@ -215,6 +215,13 @@
             </div>
         </div>
     </div>
+</div>
+
+<div class="alert alert-dark" th:if="${param.success}">
+    You successfully updated credentials.
+</div>
+<div class="alert alert-danger" th:if="${param.error}">
+    <span>Credentials Error Message</span>
 </div>
 
 <script th:src="@{/js/jquery-slim.min.js}"></script>

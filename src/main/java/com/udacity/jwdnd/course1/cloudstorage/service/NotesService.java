@@ -24,12 +24,12 @@ public class NotesService {
         notesMapper.insert(note, userid);
     }
 
-    public void update(Notes note) {
-        notesMapper.update(note);
+    public void update(Notes note, int userid) {
+        notesMapper.update(note, userid);
     }
 
-    public void delete(int noteid) {
-        notesMapper.delete(noteid);
+    public void delete(int noteid, int userid) {
+        notesMapper.delete(noteid, userid);
     }
 
 }

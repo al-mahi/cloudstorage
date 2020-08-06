@@ -24,20 +24,21 @@ public class NotesController {
     public String createOrUpdateNote(@AuthenticationPrincipal Authentication authentication, Notes note) throws IllegalAccessException {
         User user = userService.getUser(authentication);
         if (note.getNoteid() > 0) {
-            notesService.update(note);
+            notesService.update(note, user.getUserid());
         } else {
             notesService.add(note, user.getUserid());
         }
-        return "redirect:result?success";
+        return "redirect:home?success";
     }
 
     @GetMapping("/notes/delete")
-    public String deleteNote(@RequestParam("id") int noteid) {
+    public String deleteNote(@RequestParam("id") int noteid, Authentication authentication) throws IllegalAccessException {
+        User user = userService.getUser(authentication);
         if (noteid > 0) {
-            notesService.delete(noteid);
-            return "redirect:/result?success";
+            notesService.delete(noteid, user.getUserid());
+            return "redirect:/home?success";
         }
-        return "redirect:/result?error";
+        return "redirect:/home?error";
     }
 
 }
