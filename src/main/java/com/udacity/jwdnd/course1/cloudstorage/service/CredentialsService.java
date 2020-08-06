@@ -26,14 +26,22 @@ public class CredentialsService {
         return credentials.stream().map(this::decryptPassword).collect(Collectors.toList());
     }
 
+    public Credentials getEncryptedCredential(int credentialId, int userid) {
+        return credentialsMapper.findByCredentialIdAndUserid(credentialId, userid);
+    }
+
+    public Credentials getDecryptedCredential(int credentialId, int userid) {
+        return decryptPassword(credentialsMapper.findByCredentialIdAndUserid(credentialId, userid));
+    }
+
     private Credentials decryptPassword(Credentials credential) {
         credential.setPassword(encryptionService.decryptValue(credential.getPassword(),
                 credential.getKey()));
         return credential;
     }
 
-    public void addCredential(Credentials credential, int userid) {
-        credentialsMapper.insert(encryptPassword(credential), userid);
+    public int addCredential(Credentials credential, int userid) {
+        return credentialsMapper.insert(encryptPassword(credential), userid);
     }
 
     private Credentials encryptPassword(Credentials credential) {
@@ -43,12 +51,12 @@ public class CredentialsService {
         return credential;
     }
 
-    public void updateCredential(Credentials credential) {
-        credentialsMapper.update(encryptPassword(credential));
+    public int updateCredential(Credentials credential, int userid) {
+        return credentialsMapper.update(encryptPassword(credential), userid);
     }
 
-    public void deleteCredential(int credentialid) {
-        credentialsMapper.delete(credentialid);
+    public void deleteCredential(int credentialid, int userid) {
+        credentialsMapper.delete(credentialid, userid);
     }
 
 }

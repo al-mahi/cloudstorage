@@ -10,24 +10,20 @@ import org.springframework.stereotype.Repository;
 @Mapper
 public interface CredentialsMapper {
 
-    @Select("SELECT * FROM CREDENTIALS")
-    List<Credentials> findAll();
-
-    @Select("SELECT * FROM CREDENTIALS WHERE credentialid = #{credentialid}")
-    Credentials findByCredentialId(int credentialid);
-
     @Select("SELECT * FROM CREDENTIALS WHERE userid = #{userid}")
     List<Credentials> findAllByUserid(int userid);
+
+    @Select("SELECT * FROM CREDENTIALS WHERE credentialid = #{credentialId} AND userid = #{userid}")
+    Credentials findByCredentialIdAndUserid(int credentialId, int userid);
 
     @Insert(
             "INSERT INTO CREDENTIALS (url, username, key, password, userid) VALUES (#{credential.url}, #{credential.username}, #{credential.key}, #{credential.password}, #{userid})")
     int insert(Credentials credential, int userid);
 
-    @Delete("DELETE FROM CREDENTIALS WHERE credentialid = #{credentialid}")
-    int delete(int credentialid);
+    @Delete("DELETE FROM CREDENTIALS WHERE credentialid = #{credentialid} AND userid = #{userid}")
+    int delete(int credentialid, int userid);
 
     @Update(
-            "UPDATE CREDENTIALS SET url = #{url}, username = #{username}, key = #{key}, password = #{password} WHERE credentialid = #{credentialid}")
-    int update(Credentials credential);
-
+            "UPDATE CREDENTIALS SET url = #{url}, username = #{username}, key = #{key}, password = #{password} WHERE credentialid = #{credentialid} AND userid = #{userid}")
+    int update(Credentials credential, int userid);
 }

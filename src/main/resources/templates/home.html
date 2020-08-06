@@ -12,7 +12,7 @@
 <div class="container">
     <div id="logoutDiv">
         <form method="POST" th:action="@{/logout}">
-            <button class="btn btn-secondary float-right" id="logout" type="submit">Logout</button>
+            <button class="btn btn-secondary float-right" id="logout" onclick="logoutActions()" type="submit">Logout</button>
         </form>
     </div>
     <div id="contentDiv" style="clear: right;">
@@ -158,11 +158,19 @@
                             </td>
                             <td class="saved-credential-url" scope="row" th:text="${credential.url}"></td>
                             <td th:text="${credential.username}"></td>
-                            <td>********</td>
+                            <td th:text="${credential.password}"></td>
                         </tr>
                         </tbody>
                     </table>
+
+                    <div class="alert alert-dark" th:if="${param.success}">
+                        You successfully updated credentials.
+                    </div>
+                    <div class="alert alert-danger" th:if="${param.error}">
+                        <span>Credentials Error Message</span>
+                    </div>
                 </div>
+
 
                 <div aria-hidden="true" aria-labelledby="credentialModalLabel" class="modal fade" id="credentialModal"
                      role="dialog" tabindex="-1">
@@ -217,7 +225,7 @@
 <script type="text/javascript">
     // For opening the note modal
     function showNoteModal(note) {
-
+        sessionStorage.setItem('currentTab', 'nav-notes', {expires: 1})
         $('#note-id').val(note && note.noteid ? note.noteid : 0);
         $('#note-title').val(note && note.notetitle ? note.notetitle : '');
         $('#note-description').val(note && note.notedescription ? note.notedescription : '');
@@ -226,12 +234,15 @@
 
     // For opening the credentials modal
     function showCredentialModal(credential) {
+        sessionStorage.setItem('currentTab', 'nav-credentials', {expires: 1})
         $('#credential-id').val(credential && credential.credentialid ? credential.credentialid : 0);
         $('#credential-url').val(credential && credential.url ? credential.url : '');
         $('#credential-username').val(credential && credential.username ? credential.username : '');
         $('#credential-password').val(credential && credential.password ? credential.password : '');
         $('#credentialModal').modal('show');
     }
+    function logoutActions(){sessionStorage.clear()}
+    $('#nav-tab a[href="#' + sessionStorage.getItem('currentTab') + '"]').tab('show');
 </script>
 </body>
 </html>
