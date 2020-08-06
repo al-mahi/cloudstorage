@@ -18,7 +18,7 @@ public class CredentialsService {
     @Autowired
     private EncryptionService encryptionService;
 
-    public List<Credentials> getAllCredentials(int userid) throws Exception {
+    public List<Credentials> getAllDecryptedCredentials(int userid) throws Exception {
         List<Credentials> credentials = credentialsMapper.findAllByUserid(userid);
         if (credentials == null) {
             throw new Exception();
@@ -26,12 +26,12 @@ public class CredentialsService {
         return credentials.stream().map(this::decryptPassword).collect(Collectors.toList());
     }
 
-    public Credentials getEncryptedCredential(int credentialId, int userid) {
-        return credentialsMapper.findByCredentialIdAndUserid(credentialId, userid);
-    }
-
-    public Credentials getDecryptedCredential(int credentialId, int userid) {
-        return decryptPassword(credentialsMapper.findByCredentialIdAndUserid(credentialId, userid));
+    public List<Credentials> getAllEncryptedCredentials(Integer userid) throws Exception {
+        List<Credentials> credentials = credentialsMapper.findAllByUserid(userid);
+        if (credentials == null) {
+            throw new Exception();
+        }
+        return credentials;
     }
 
     private Credentials decryptPassword(Credentials credential) {
@@ -41,7 +41,8 @@ public class CredentialsService {
     }
 
     public int addCredential(Credentials credential, int userid) {
-        return credentialsMapper.insert(encryptPassword(credential), userid);
+        Credentials encryptedCredentials = encryptPassword(credential);
+        return credentialsMapper.insert(encryptedCredentials, userid);
     }
 
     private Credentials encryptPassword(Credentials credential) {
@@ -51,8 +52,8 @@ public class CredentialsService {
         return credential;
     }
 
-    public int updateCredential(Credentials credential, int userid) {
-        return credentialsMapper.update(encryptPassword(credential), userid);
+    public int updateCredential(Credentials credentials, int userid) {
+        return credentialsMapper.update(encryptPassword(credentials), userid);
     }
 
     public void deleteCredential(int credentialid, int userid) {

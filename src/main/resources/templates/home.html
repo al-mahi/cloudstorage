@@ -150,7 +150,7 @@
                         <tbody>
                         <tr th:each="credential : ${credentials}">
                             <td>
-                                <button class="edit-credential btn btn-success" th:onclick="javascript:showCredentialModal([[${credential}]])"
+                                <button class="edit-credential btn btn-success" th:onclick="javascript:showCredentialModal([[${credential}]], [[${plainCredentials}]])"
                                         type="button">Edit
                                 </button>
                                 <a class="delete-credential btn btn-danger"
@@ -233,14 +233,15 @@
     }
 
     // For opening the credentials modal
-    function showCredentialModal(credential) {
+    function showCredentialModal(credential, plainCredentials) {
         sessionStorage.setItem('currentTab', 'nav-credentials', {expires: 1})
         $('#credential-id').val(credential && credential.credentialid ? credential.credentialid : 0);
         $('#credential-url').val(credential && credential.url ? credential.url : '');
         $('#credential-username').val(credential && credential.username ? credential.username : '');
-        $('#credential-password').val(credential && credential.password ? credential.password : '');
+        $('#credential-password').val(credential && credential.password ? plainCredentials.find(e => e.credentialid === credential.credentialid).password : '');
         $('#credentialModal').modal('show');
     }
+
     function logoutActions(){sessionStorage.clear()}
     $('#nav-tab a[href="#' + sessionStorage.getItem('currentTab') + '"]').tab('show');
 </script>

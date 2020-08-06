@@ -39,10 +39,10 @@ public class CredentialsController {
     }
 
     @GetMapping("/credentials/delete")
-    public String deleteCredentials(@RequestParam("id") int credentialid, Authentication authentication) throws IllegalAccessException {
+    public String deleteCredentials(@RequestParam(name = "id") String credentialid, Authentication authentication) throws IllegalAccessException {
         User user = userService.getUser(authentication);
-        if (credentialid > 0) {
-            credentialsService.deleteCredential(credentialid, user.getUserid());
+        if (Integer.parseInt(credentialid) > 0) {
+            credentialsService.deleteCredential(Integer.parseInt(credentialid), user.getUserid());
             return "redirect:/home?success";
         }
         return "redirect:/home?error";
