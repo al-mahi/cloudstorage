@@ -1,54 +1,46 @@
 package com.udacity.jwdnd.course1.cloudstorage.service;
 
 import java.io.IOException;
-import java.util.Base64;
+import java.sql.Blob;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.udacity.jwdnd.course1.cloudstorage.mappers.FilesMapper;
+import com.udacity.jwdnd.course1.cloudstorage.model.Files;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class FilesService {
+    @Autowired
+    private FilesMapper filesMapper;
 
-//    @Autowired
-//    private FilesMapper filesMapper;
-//
-//    public List<ResponseFile> getAllFiles(int userid) throws Exception {
-//        List<Files> files = filesMapper.findByUserId(userid);
-//        if (files == null) {
-//            throw new Exception();
-//        }
-//        return files.stream().map(this::getResponseFile).collect(Collectors.toList());
-//    }
-//
-//    public ResponseFile getResponseFile(Files file) {
-//        String base64 = Base64.getEncoder().encodeToString(file.getFiledata());
-//        String dataURL = "data:" + file.getContenttype() + ";base64," + base64;
-//        return ResponseFile.builder()
-//                .fileid(file.getFileid())
-//                .filename(file.getFilename())
-//                .dataURL(dataURL)
-//                .build();
-//    }
-//
-//    public void addFile(MultipartFile fileUpload, int userid) throws IOException {
-//        Files file = new Files();
-//        try {
-//            file.setContenttype(fileUpload.getContentType());
-//            file.setFiledata(fileUpload.getBytes());
-//            file.setFilename(fileUpload.getOriginalFilename());
-//            file.setFilesize(Long.toString(fileUpload.getSize()));
-//        } catch (IOException e) {
-//            throw e;
-//        }
-//        filesMapper.insertFile(file, userid);
-//    }
-//
-//    public void deleteFile(int fileid) {
-//        filesMapper.deleteFile(fileid);
-//    }
+    public List<Files> getAll(int userid) throws Exception {
+        List<Files> files = filesMapper.findAllByUserId(userid);
+        if (files == null) {
+            throw new Exception("There is no file for the user");
+        }
+        return files;
+    }
 
+    public void add(MultipartFile fileUpload, int userid) throws IOException {
+        Files file = new Files();
+        try {
+            file.setContenttype(fileUpload.getContentType());
+            file.setFiledata(fileUpload.getBytes());
+            file.setFilename(fileUpload.getOriginalFilename());
+            file.setFilesize(Long.toString(fileUpload.getSize()));
+        } catch (IOException e) {
+            throw e;
+        }
+        filesMapper.insert(file, userid);
+    }
+
+    public void delete(int fileid, int userid) {
+        filesMapper.delete(fileid, userid);
+    }
+
+    public Files download(int fileid, int userid) {
+        return filesMapper.findByFileId(fileid, userid);
+    }
 }

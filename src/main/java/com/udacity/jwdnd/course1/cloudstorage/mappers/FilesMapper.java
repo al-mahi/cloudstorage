@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
+
+import java.sql.Blob;
 import java.util.List;
 
 @Repository
@@ -15,8 +17,8 @@ public interface FilesMapper {
     @Select("SELECT * FROM FILES")
     List<Files> findAll();
 
-    @Select("SELECT * FROM FILES WHERE fileid = #{fileid}")
-    Files findByFileId(int fileid);
+    @Select("SELECT * FROM FILES WHERE fileid = #{fileid} AND userid = #{userid}")
+    Files findByFileId(int fileid, int userid);
 
     @Select("SELECT * FROM FILES WHERE userid = #{userid}")
     List<Files> findAllByUserId(int userid);
@@ -25,7 +27,7 @@ public interface FilesMapper {
             "INSERT INTO FILES (filename, contenttype, filesize, filedata, userid) VALUES (#{file.filename}, #{file.contenttype}, #{file.filesize}, #{file.filedata}, #{userid})")
     int insert(Files file, int userid);
 
-    @Delete("DELETE FROM FILES WHERE fileid = #{fileid}")
-    int delete(int fileid);
+    @Delete("DELETE FROM FILES WHERE fileid = #{fileid} AND userid = #{userid}")
+    int delete(int fileid, int userid);
 
 }

@@ -55,11 +55,11 @@
                         <tbody>
                         <tr th:each="file : ${files}">
                             <td>
-                                <a class="btn btn-success" th:download="${file.name}"
-                                   th:href="${file.dataURL}">Download</a>
-                                <a class="btn btn-danger" th:href="@{/files/delete(id=${file.id})}" th:method="delete">Delete</a>
+                                <a class="btn btn-success" th:download="${file.filename}"
+                                   th:href="@{/files/download(id=${file.fileid})}">Download</a>
+                                <a class="btn btn-danger" th:href="@{/files/delete(id=${file.fileid})}" th:method="delete">Delete</a>
                             </td>
-                            <th scope="row" th:text="${file.name}"></th>
+                            <th scope="row" th:text="${file.filename}"></th>
                         </tr>
                         </tbody>
                     </table>
@@ -217,11 +217,11 @@
     </div>
 </div>
 
-<div class="alert alert-dark" th:if="${param.success}">
-    You successfully updated credentials.
+<div class="alert alert-info" th:if="${param.success}">
+    <span>Update successful!</span>
 </div>
 <div class="alert alert-danger" th:if="${param.error}">
-    <span>Credentials Error Message</span>
+    <span>Did not update. There may be some error.</span>
 </div>
 
 <script th:src="@{/js/jquery-slim.min.js}"></script>
